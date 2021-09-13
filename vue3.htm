@@ -1,0 +1,53 @@
+				<!DOCTYPE html>
+				<html>
+				  <head>
+					<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css">
+					<link href="https://cdn.jsdelivr.net/npm/quasar@2.0.0-beta.7/dist/quasar.prod.css" rel="stylesheet" type="text/css">
+				  </head>
+
+				  <body>
+					<div id="q-app">
+						
+					</div>
+				   
+					<script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+					<script src="https://cdn.jsdelivr.net/npm/quasar@2.0.0-beta.7/dist/quasar.umd.prod.js"></script>
+					
+					<script>
+						
+						const { createApp, ref, computed, watch, reactive, nextTick, onBeforeUnmount } = Vue;
+
+						let timer = null;
+
+						const logic = {
+							setup () {
+								return {
+								}
+							},
+
+							 data() {
+								return {
+								  value : 0
+								}
+							},
+
+							mounted() {
+							  timer = setInterval(() => {
+								this.value++;
+								if(this.value >= 10) {
+								  clearInterval(timer);
+								}                
+							  }, 100);
+							},  
+
+							template : `
+								<h5>test : {{value}}</h5>
+							`
+						};
+						
+						const app = Vue.createApp(logic);
+						app.use(Quasar);
+						app.mount('#q-app');
+					</script>
+				  </body>
+				</html>

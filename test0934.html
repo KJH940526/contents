@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/monoid" type="text/css" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css">
+  <link href="https://cdn.jsdelivr.net/npm/quasar@2.0.4/dist/quasar.prod.css" rel="stylesheet" type="text/css">
+  <title>통계페이지</title>
+</head>
+
+<body>
+    <div id="hello-vue" class="demo">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+      <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/quasar@2.0.4/dist/quasar.umd.prod.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/quasar@2.0.4/dist/lang/ko-KR.umd.prod.js"></script>
+
+        <div>
+          <h2 style="font-size: 25px; text-align: center;">{{ title }} </h2>
+        </div>
+        <div>
+          <div class="q-pa-md" style="max-width: 300px">
+            <q-input readonly clearable v-model="startDate">
+              <template v-slot:prepend>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy transition-show="scale" transition-hide="scale">
+                    <q-date v-model="startDate" mask="YYYY-MM-DD HH:mm" ></q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>        
+              <template v-slot:append>
+                <q-icon name="access_time" class="cursor-pointer">
+                  <q-popup-proxy transition-show="scale" transition-hide="scale">
+                    <q-time v-model="startDate" mask="YYYY-MM-DD HH:mm" format24h ></q-time>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </div>
+        </div>
+        <div>
+          <div class="q-pa-md" style="max-width: 300px">
+            <q-input readonly clearable v-model="endDate">
+              <template v-slot:prepend>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy transition-show="scale" transition-hide="scale">
+                    <q-date v-model="endDate" mask="YYYY-MM-DD HH:mm" ></q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>        
+              <template v-slot:append>
+                <q-icon name="access_time" class="cursor-pointer">
+                  <q-popup-proxy transition-show="scale" transition-hide="scale">
+                    <q-time v-model="endDate" mask="YYYY-MM-DD HH:mm" format24h ></q-time>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </div>
+        </div>
+
+        <div>
+          <h2>일단 응애</h2>
+
+        </div>
+
+    </div>
+</body>
+
+<script type="text/javascript" src="data.json"></script>
+<script>
+let mydata =  JSON.parse(data);
+function getFormatDate(date){
+    var year = date.getFullYear();              //yyyy
+    var month = (1 + date.getMonth());          //M
+    month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+    var day = date.getDate();                   //d
+    day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+    return  year + '-' + month + '-' + day;       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+}
+var today = new Date();
+today = getFormatDate(today)          //오늘날짜
+
+// console.log(Vue);
+
+const HelloVueApp = Vue.createApp({
+  data() {
+    return {
+      title: '이벤트 통계',
+      dataStatistics : [mydata], //기본 데이터
+      eventStatistics : [],   //이벤트 상황
+      dateStatistics : [],          //시간검색 이벤트 발생현황
+      startDate : '',
+      endDate : '',
+
+
+      timeStatistics : [],         //하루 시간별 이벤트 발생현황
+
+
+      //지역별 이벤트 발생현황
+      areaStatistics : [],
+      areaStatistics1 : [],         //대가야읍
+      areaStatistics2 : [],         //덕곡면
+      areaStatistics3 : [],         //운수면
+      areaStatistics4 : [],         //성산면
+      areaStatistics5 : [],         //다산면
+      areaStatistics6 : [],         //개진면
+      areaStatistics7 : [],         //우곡면
+      areaStatistics8 : [],         //쌍림면
+    }
+  },
+  methods:{
+    getDataStatistics(mydata2){
+    },
+
+    getTimeStatistics(mydata2){
+      for(i=0; i < mydata2[0].length; i++){
+        if(today === mydata2[0][i].time.substring(0,10)){
+          this.timeStatistics.push(mydata2[0][i])
+        }
+      }
+    },
+
+    getAreaStatistics(mydata2){
+      for(i=0; i < mydata2[0].length; i++){
+        switch(mydata2[0][i].code2){
+          case "대가야읍" : this.areaStatistics1.push(mydata2[0][i])
+          break;
+          case "덕곡면" : this.areaStatistics2.push(mydata2[0][i])
+          break;
+          case "운수면" : this.areaStatistics3.push(mydata2[0][i])
+          break;
+          case "성산면" : this.areaStatistics4.push(mydata2[0][i])
+          break;
+          case "다산면" : this.areaStatistics5.push(mydata2[0][i])
+          break;
+          case "개진면" : this.areaStatistics6.push(mydata2[0][i])
+          break;
+          case "우곡면" : this.areaStatistics7.push(mydata2[0][i])
+          break;
+          case "쌍림면" : this.areaStatistics8.push(mydata2[0][i])
+          break;
+          default : this.areaStatistics.push(mydata2[0][i])
+        }
+      }
+    }
+
+  },
+
+  created(){
+    var mydata2 = JSON.parse(JSON.stringify((this.dataStatistics)))
+    this.getDataStatistics(mydata2)
+
+
+    //하루 시간별 이벤트 발생현황
+    this.getTimeStatistics(mydata2)
+
+    //지역별 이벤트 발생현황
+    this.getAreaStatistics(mydata2)
+
+
+  },
+  mounted(){
+    // console.log(this.timeStatistics);
+    // console.log(this.areaStatistics);
+
+  }
+  
+})
+
+HelloVueApp.use(Quasar)
+Quasar.lang.set(Quasar.lang.koKR)
+HelloVueApp.mount('#hello-vue')
+
+// console.log(HelloVueApp)
+
+
+
+
+</script>
+</html>
