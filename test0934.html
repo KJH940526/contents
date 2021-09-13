@@ -85,6 +85,7 @@ today = getFormatDate(today)          //오늘날짜
 // console.log(Vue);
 
 const HelloVueApp = Vue.createApp({
+  extends: VueChartJs.Bar,
   data() {
     return {
       title: '이벤트 통계',
@@ -108,6 +109,8 @@ const HelloVueApp = Vue.createApp({
       areaStatistics6 : [],         //개진면
       areaStatistics7 : [],         //우곡면
       areaStatistics8 : [],         //쌍림면
+
+      
     }
   },
   methods:{
@@ -164,7 +167,7 @@ const HelloVueApp = Vue.createApp({
   mounted(){
     // console.log(this.timeStatistics);
     // console.log(this.areaStatistics);
-
+    console.log(VueChartJs);
   }
   
 })
